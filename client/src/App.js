@@ -1,4 +1,7 @@
 import 'antd/dist/antd.css'
+import { Layout, Button , Menu } from 'antd'
+import React, { useState, useRef } from 'react'
+import { callApi } from './services/apiCall'
 import {
   DesktopOutlined,
   FileOutlined,
@@ -6,80 +9,66 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Breadcrumb, Layout, Menu, Input, Table, Row, Col } from 'antd'
-import React, { useState } from 'react'
+
 const { Header, Content, Footer, Sider } = Layout
 
-const OutputTable = () => {
-  const dataSource = [
-    {
-      key: '1',
-      name: 'Mike',
-      age: 32,
-      address: '10 Downing Street',
-    },
-    {
-      key: '2',
-      name: 'John',
-      age: 42,
-      address: '10 Downing Street',
-    },
-  ]
-
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-  ]
-  return (
-    <Table dataSource={dataSource} columns={columns} />
-  )
-}
-
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  }
-}
-
-const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
-]
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false)
+
+  function handleSearch() {
+    const data = callApi(location, minValue, maxValue);
+    console.log("DATA", data)
+  }
+
+  function displayResults(data){
+    console.log("in display data")
+    console.log(data)
+  }
+
+  const [location, setLocation]=useState(null)
+  const [minValue, setMin]=useState(null)
+  const [maxValue, setMax]=useState(null)
+
+  function getItem(label, key, icon, children) {
+    return {
+      key,
+      icon,
+      children,
+      label,
+    }
+  }
+  
+  const items = [
+    getItem('Home Page', '1', <PieChartOutlined />),
+    getItem('Saved Houses', '2', <DesktopOutlined />),
+    getItem('Files', '9', <FileOutlined />),
+    getItem('Settings', 'sub1', <UserOutlined />, [
+      getItem('Tom', '3'),
+      getItem('Bill', '4'),
+      getItem('Alex', '5'),
+    ]),
+   
+  ]
+  
+
+  function getLocation(val){
+    setLocation(val.target.value)
+  }
+  function getMin(val){
+    setMin(val.target.value)
+  }
+  function getMax(val){
+    setMax(val.target.value)
+  }
+
+
+
   return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
-    >
+    <Layout style={{minHeight: '100vh'}}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+      <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} style={{marginTop: '60px'}}/>
       </Sider>
       <Layout className="site-layout">
         <Header
@@ -87,12 +76,11 @@ const App = () => {
           style={{
             padding: 0,
           }}
+          
         />
+        <h1> House Cashflow Api </h1>
         <Content
-          style={{
-            margin: '0 16px',
-          }}
-        >
+          style={{margin: '0 16px'}} >
           <div
             className="site-layout-background"
             style={{
@@ -100,18 +88,19 @@ const App = () => {
               minHeight: 360,
             }}
           >
-            <p>Enter Location: </p>
-            <Input placeholder="Basic usage" />
+          <div>
+            <h1> Location: </h1>
+            <input type="text" onChange={getLocation} />
+            <h1> Min Value: </h1>
+            <input type="text" onChange={getMin} />
+            <h1> Max Value: </h1>
+            <input type="text" onChange={getMax} />
             <br></br>
-            <OutputTable/>
+            <button onClick={()=>handleSearch(location, minValue, maxValue)} >Run API</button>
+          </div>
           </div>
         </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          Ant Design ©2018 Created by Ant UED
+        <Footer  style={{textAlign: 'center'}}>
         </Footer>
       </Layout>
     </Layout>
