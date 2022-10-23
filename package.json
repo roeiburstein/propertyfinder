@@ -1,12 +1,14 @@
 {
-  "homepage" : "https://propertycashflowapp.github.io/propertycashflowapp",
+  "homepage" : "https://propertycashflowapp.github.io/",
   "name": "propertycashflowapp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "proxy": "http://localhost:3001",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
