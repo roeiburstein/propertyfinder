@@ -1,6 +1,6 @@
 {
-  "homepage" : ".",
-  "name": "roei-website",
+  "homepage" : "https://propertycashflowapp.github.io/propertycashflowapp",
+  "name": "propertycashflowapp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
